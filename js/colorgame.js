@@ -1,115 +1,150 @@
+/*------------------------------------
+  The game object and its functions
+  ------------------------------------
+  + game.init - initilizes game parameters to default and removes old game elements
+  + game.win - changes elements to show player they have guessed correctly
+  + game.listeners - deals with listeners for buttons, etc.
+     - game.listeners.initMain - initializes main game control functionality
+     - game.listeners.initSquares - initializes squares control functionality
+  + game.board - deals with game board generation
+     - game.board.setSize - sets the size of the board element/squares to accommodate different difficulties
+     - game.board.setSquareColors - sets the random colors of the squares
+     - game.board.getRandomColor - generates a random RGB value
+     - game.board.getCorrectColor - picks one color from random selected colors
+     - game.board.generate - generates the board by running the other game.board functions
+*/
 
-let boardColors = [];
-let squares, correctColor;
-let msg = document.querySelector("#message");
-let board = document.querySelector("#gameboard");
-let txtCorrectColor = document.getElementById("correctcolor");
-let btnGameControl = document.getElementById("gamecontrol");
-let btnEasyMode = document.getElementById("easymode");
-let btnMediumMode = document.getElementById("mediummode");
-let btnHardMode = document.getElementById('hardmode');
-let titlebar = document.getElementById('titlebar');
+let game = {
+    // variables
+    arrSquareColors: [],
+    varCorrectColor: null,
+    
+    // dom elements
+    elSquares: [], // array is populated with game.listeners.initSquares()
+    elMsg: document.querySelector("#message"),
+    elBoard: document.querySelector("#gameboard"),
+    elCorrectColor: document.getElementById("correctcolor"),
+    elGameControl: document.getElementById("gamecontrol"),
+    elEasyMode: document.getElementById("easymode"),
+    elMediumMode: document.getElementById("mediummode"),
+    elHardMode: document.getElementById('hardmode'),
+    elTitlebar: document.getElementById('titlebar'),
+    
+    // functions
+    init: function initGame(num) {
+        game.elGameControl.textContent = "NEW COLORS";
+        game.elMsg.textContent = "Good luck!";
+        game.elBoard.innerHTML = "";   // remove all squares from the board
+        game.arrSquareColors.length = 0; // set board colors to 0
+        game.elTitlebar.style.backgroundColor = "steelblue";
+        game.board.generate();
+    },
+    
+    win: function winGame() {
+        game.elTitlebar.style.backgroundColor = game.varCorrectColor;
+        for (let i = 0; i < game.elSquares.length; i++) {
+            game.elSquares[i].style.backgroundColor = game.varCorrectColor;
+        }
+        game.elGameControl.textContent = "PLAY AGAIN?";
+    },
+    
+    // functions dealing with listeners
+    listeners: {
+        initMain: function initListeners () {
+            game.elGameControl.addEventListener("click", function() {
+                game.init(difficulty);
+            });
+            game.elEasyMode.addEventListener("click", function() {
+                game.elEasyMode.classList.add('selected');
+                game.elMediumMode.classList.remove('selected');
+                game.elHardMode.classList.remove('selected');
+                difficulty = 3;
+                game.init(difficulty);
+            });
+            game.elMediumMode.addEventListener("click", function() {
+                game.elEasyMode.classList.remove('selected');
+                game.elMediumMode.classList.add('selected');
+                game.elHardMode.classList.remove('selected');
+                difficulty = 6;
+                game.init(difficulty);
+            });
+            game.elHardMode.addEventListener("click", function() {
+                game.elEasyMode.classList.remove('selected');
+                game.elMediumMode.classList.remove('selected');
+                game.elHardMode.classList.add('selected');
+                difficulty = 9;
+                game.init(difficulty);
+            })
+        },
+        
+        initSquares: function initSquares() {
+            // assign the random colors to the board squares
+            game.elSquares = document.querySelectorAll(".square");
+            for (let i = 0; i < game.elSquares.length; i++) {
+                game.elSquares[i].style.background = game.arrSquareColors[i];
+                // add event handler to this square
+                game.elSquares[i].addEventListener("click", function() {
+                    if (this.style.backgroundColor === game.varCorrectColor) {
+                        game.elMsg.textContent = "Correct!";
+                        game.win();
+                    } else {
+                        this.style.backgroundColor = "#232323";
+                        game.elMsg.textContent = "Try again!";
+                    }
+                });
+            }
+        }
+    },
+
+    // functions dealing with board generation
+    board: {
+        setSize: function setBoardSize () {
+            // set game board size based on difficulty
+            if (difficulty < 4) {
+                game.elBoard.style.maxWidth = "1200px";
+            } else if (difficulty < 7) {
+                game.elBoard.style.maxWidth = "800px";
+            } else {
+                game.elBoard.style.maxWidth = "500px";
+            };
+        },
+        
+        setSquareColors: function setSquareColors () {
+            // generate new squares and randomize a color for each square
+            for (let i = 0; i < difficulty; i++) {
+                game.elBoard.innerHTML = `${game.elBoard.innerHTML}
+                <div class="square"></div>`;
+                game.arrSquareColors.push(game.board.getRandomColor());
+            }
+        },
+        
+        getRandomColor: function getRandomColor() {
+            let r = Math.floor(Math.random() * 256);
+            let g = Math.floor(Math.random() * 256);
+            let b = Math.floor(Math.random() * 256);
+            return `rgb(${r}, ${g}, ${b})`;
+        },
+        
+        getCorrectColor: function pickColor() {
+            // pick from the available colors the color we are trying to guess
+            let randSquare = Math.floor(Math.random() * difficulty);
+            game.varCorrectColor = game.arrSquareColors[randSquare];
+            game.elCorrectColor.textContent = game.varCorrectColor;
+        },
+        
+        generate: function generateBoard() {
+            game.board.setSize();
+            game.board.setSquareColors();
+            game.board.getCorrectColor();
+            game.listeners.initSquares();
+        }
+    }
+}
 
 // default difficulty mode is medium
-btnMediumMode.classList.add('selected');
+game.elMediumMode.classList.add('selected');
 let difficulty = 6;
 
-setGameControls();
-startGame(difficulty);
+game.listeners.initMain();
+game.init(difficulty);
 
-function setGameControls () {
-    btnGameControl.addEventListener("click", function() {
-        startGame(difficulty);
-    });
-    btnEasyMode.addEventListener("click", function() {
-        btnEasyMode.classList.add('selected');
-        btnMediumMode.classList.remove('selected');
-        btnHardMode.classList.remove('selected');
-        difficulty = 3;
-        startGame(difficulty);
-    });
-    btnMediumMode.addEventListener("click", function() {
-        btnEasyMode.classList.remove('selected');
-        btnMediumMode.classList.add('selected');
-        btnHardMode.classList.remove('selected');
-        difficulty = 6;
-        startGame(difficulty);
-    });
-    btnHardMode.addEventListener("click", function() {
-        btnEasyMode.classList.remove('selected');
-        btnMediumMode.classList.remove('selected');
-        btnHardMode.classList.add('selected');
-        difficulty = 9;
-        startGame(difficulty);
-    })
-};
-
-function startGame(num) {
-    console.log("Starting new game...");
-    console.log(`Difficulty of ${num}`);
-    btnGameControl.textContent = "NEW COLORS";
-    message.textContent = "Good luck!";
-    board.innerHTML = "";   // remove all squares from the board
-    boardColors.length = 0; // set board colors to 0
-    titlebar.style.backgroundColor = "steelblue";
-    generateBoard(num);
-}
-
-function winGame() {
-    titlebar.style.backgroundColor = correctColor;
-    for (let i = 0; i < squares.length; i++) {
-        squares[i].style.backgroundColor = correctColor;
-    }
-    btnGameControl.textContent = "PLAY AGAIN?";
-}
-
-function generateBoard(num) {
-    console.log("Generating new board...");
-    console.log(`Generating ${num} squares...`);
-    // set game board size based on difficulty
-    if (num < 4) {
-        board.style.maxWidth = "1200px";
-    } else if (num < 7) {
-        board.style.maxWidth = "800px";
-    } else {
-        board.style.maxWidth = "500px";
-    }
-    
-    // generate new squares and randomize a color for each square
-    for (let i = 0; i < num; i++) {
-        board.innerHTML = `${board.innerHTML}
-        <div class="square"></div>`;
-        boardColors.push(getRandomColor());
-        console.log(`Adding square ${i}...`);
-    }
-    
-    // pick from the available colors the color we are trying to guess
-    randSquare = Math.floor(Math.random() * num);
-    correctColor = boardColors[randSquare];
-    txtCorrectColor.textContent = correctColor;
-    console.log(`The correct color is ${correctColor} which is on square ${randSquare + 1}`);
-    
-    // assign the random colors to the board squares
-    squares = document.querySelectorAll(".square");
-    for (let i = 0; i < squares.length; i++) {
-        squares[i].style.background = boardColors[i];
-        console.log(`Square ${i} has color ${boardColors[i]}...`);
-        // add event handler to this square
-        squares[i].addEventListener("click", function() {
-            if (this.style.backgroundColor === correctColor) {
-                msg.textContent = "Correct!";
-                winGame();
-            } else {
-                this.style.backgroundColor = "#232323";
-                msg.textContent = "Try again!";
-            }
-        });
-    }
-}
-
-function getRandomColor() {
-    let r = Math.floor(Math.random() * 256);
-    let g = Math.floor(Math.random() * 256);
-    let b = Math.floor(Math.random() * 256);
-    return `rgb(${r}, ${g}, ${b})`;
-}
