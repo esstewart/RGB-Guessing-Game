@@ -8,14 +8,18 @@
     <title>Color Game</title>
 </head>
 <body>
-    <div id="titlebar"><h1>The Fabulous<br><span id="correctcolor">RGB</span><br>Guessing Game</h1></div>
+    <div id="titlebar"><h1>THE FABULOUS<br><span id="correctcolor">RGB</span><br>GUESSING GAME</h1></div>
     <div id="controlbar">
-        <button id="gamecontrol">New Game</button>
-        <span id="message"></span>
-        <button id="easymode">EASY</button>
-        <button id="mediummode">MEDIUM</button>
-        <button id="hardmode">HARD</button>
+        <div class="controlbar-content-wrapper">
+            <button id="gamecontrol">New Game</button>
+            <div class="mode-button-wrapper">
+                <button id="easymode">EASY</button>
+                <button id="mediummode">MEDIUM</button>
+                <button id="hardmode">HARD</button>
+            </div>
+        </div>
     </div>
+    <h2 id="message"></h2>
     <div id="gameboard">
     </div>
 
