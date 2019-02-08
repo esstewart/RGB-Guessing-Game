@@ -4,6 +4,7 @@ html {
     margin: 0;
     font-family: "Montserrat", "Avenir";
     padding-bottom: 20px;
+    color: white;
 }
 
 h1 {
@@ -84,6 +85,14 @@ button {
     transition: all 0.2s;
     -moz-transition: all 0.2s;
     -webkit-transition: all 0.2s;
+    margin-left: -2px;
+    margin-right: -2px;
+    padding-left: 8px;
+    padding-right: 8px;
+}
+
+.mode-button-wrapper {
+    height: 30px;
 }
 
 button:hover {
