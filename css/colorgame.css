@@ -1,15 +1,15 @@
-body {
+body,
+html {
     background-color: #232323;
     margin: 0;
     font-family: "Montserrat", "Avenir";
+    padding-bottom: 20px;
 }
 
 h1 {
-    color: white;
     margin: 0;
     font-weight: normal;
     line-height: 1.4;
-    text-transform: uppercase;
     padding: 20px 0;
 }
 
@@ -30,6 +30,23 @@ h1 {
     text-align: center;
 }
 
+.controlbar-content-wrapper {
+    align-items: center;
+    display: flex;
+    height: 100%;
+    justify-content: space-around;
+    margin: 0 auto;
+    width: 80%;
+}
+
+#message {
+    color: white;
+    font-weight: normal;
+    margin: 20px auto 0;
+    text-align: center;
+    text-transform: uppercase;
+}
+
 #gameboard {
     margin: 20px auto;
     max-width: 600px;
@@ -37,12 +54,7 @@ h1 {
 
 #correctcolor {
     font-size: 200%;
-}
-
-#message {
-    display: inline-block;
-    width: 15%;
-    padding-left: 85px;
+    text-transform: uppercase;
 }
 
 #titlebar {
@@ -77,4 +89,22 @@ button {
 button:hover {
     color: white;
     background: steelblue;
+}
+
+@media only screen and (max-width: 415px) {
+    #controlbar {
+        height: 40px;
+    }
+
+    .controlbar-content-wrapper {
+        width: 100%;
+    }
+
+    #gameboard {
+        margin-top: 10px;
+    }
+
+    #correctcolor {
+        font-size: 130%;
+    }
 }
