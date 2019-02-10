@@ -31,7 +31,7 @@ h1 {
     text-align: center;
 }
 
-.controlbar-content-wrapper {
+#controlbar-content-wrapper {
     align-items: center;
     display: flex;
     height: 100%;
@@ -90,7 +90,7 @@ button {
     padding-right: 8px;
 }
 
-.mode-button-wrapper {
+#mode-button-wrapper {
     height: 30px;
 }
 
@@ -104,7 +104,7 @@ button:hover {
         height: 40px;
     }
 
-    .controlbar-content-wrapper {
+    #controlbar-content-wrapper {
         width: 100%;
     }
 
