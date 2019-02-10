@@ -88,6 +88,7 @@ let game = {
                         game.elMsg.textContent = "Correct!";
                         game.win();
                     } else {
+                        this.style.transform = "rotateY(180deg)";
                         this.style.backgroundColor = "#232323";
                         game.elMsg.textContent = "Try again!";
                     }
@@ -112,8 +113,7 @@ let game = {
         setSquareColors: function setSquareColors () {
             // generate new squares and randomize a color for each square
             for (let i = 0; i < difficulty; i++) {
-                game.elBoard.innerHTML = `${game.elBoard.innerHTML}
-                <div class="square"></div>`;
+                game.elBoard.innerHTML = game.elBoard.innerHTML+'<div class="square"></div>';
                 game.arrSquareColors.push(game.board.getRandomColor());
             }
         },
@@ -122,7 +122,7 @@ let game = {
             let r = Math.floor(Math.random() * 256);
             let g = Math.floor(Math.random() * 256);
             let b = Math.floor(Math.random() * 256);
-            return `rgb(${r}, ${g}, ${b})`;
+            return 'rgb('+r+', '+g+', '+b+')';
         },
         
         getCorrectColor: function pickColor() {
