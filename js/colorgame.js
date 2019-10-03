@@ -95,6 +95,7 @@ let game = {
             game.elSquares = document.querySelectorAll(".square");
             for (let i = 0; i < game.elSquares.length; i++) {
                 game.elSquares[i].removeEventListener("click", game.board.checkForWin);
+
             }
         }
     },    
@@ -164,6 +165,21 @@ let game = {
         check: function getTimerElapsed() {
             let timeFinish = new Date();
             game.varTimeElapsed = timeFinish.getTime() - game.varTimeElapsed;
+        }
+    },
+
+    // timer functions
+    timer: {
+        init: function initGameTimer() {
+            let timeStart = new Date();
+            game.varTimeElapsed = timeStart.getTime();
+            console.log("Start time: " + game.varTimer);
+        },
+
+        check: function getTimerElapsed() {
+            let timeFinish = new Date();
+            game.varTimeElapsed = timeFinish.getTime() - game.varTimeElapsed;
+            console.log("Finish time: " + game.varTimeElapsed);
         }
     }
 }
