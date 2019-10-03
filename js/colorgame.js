@@ -95,7 +95,6 @@ let game = {
             game.elSquares = document.querySelectorAll(".square");
             for (let i = 0; i < game.elSquares.length; i++) {
                 game.elSquares[i].removeEventListener("click", game.board.checkForWin);
-
             }
         }
     },    
