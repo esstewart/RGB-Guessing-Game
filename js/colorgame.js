@@ -46,6 +46,7 @@ let game = {
         game.elTitlebar.style.backgroundColor = game.varCorrectColor;
         for (let i = 0; i < game.elSquares.length; i++) {
             game.elSquares[i].style.backgroundColor = game.varCorrectColor;
+            game.listeners.stopListening();
         }
         game.elGameControl.textContent = "PLAY AGAIN?";
     },
@@ -85,17 +86,15 @@ let game = {
             for (let i = 0; i < game.elSquares.length; i++) {
                 game.elSquares[i].style.background = game.arrSquareColors[i];
                 // add event handler to this square
-                game.elSquares[i].addEventListener("click", function() {
-                    if (this.style.backgroundColor === game.varCorrectColor) {
-                        game.timer.check()
-                        game.elMsg.textContent = "Correct in " + (game.varTimeElapsed / 1000) + " seconds!";
-                        game.win();
-                    } else {
-                        this.style.transform = "rotateY(180deg)";
-                        this.style.backgroundColor = "#232323";
-                        game.elMsg.textContent = "Try again!";
-                    }
-                });
+                game.elSquares[i].addEventListener("click", game.board.checkForWin);
+            }
+        },
+
+        stopListening: function removeListeners() {
+            // remove all the listeners from the squares
+            game.elSquares = document.querySelectorAll(".square");
+            for (let i = 0; i < game.elSquares.length; i++) {
+                game.elSquares[i].removeEventListener("click", game.board.checkForWin);
             }
         }
     },
@@ -140,6 +139,18 @@ let game = {
             game.board.setSquareColors();
             game.board.getCorrectColor();
             game.listeners.initSquares();
+        },
+
+        checkForWin: function checkForWin() {
+            if (this.style.backgroundColor === game.varCorrectColor) {
+                game.timer.check()
+                game.elMsg.textContent = "Correct in " + (game.varTimeElapsed / 1000) + " seconds!";
+                game.win();
+            } else {
+                this.style.transform = "rotateY(180deg)";
+                this.style.backgroundColor = "#232323";
+                game.elMsg.textContent = "Try again!";
+            }
         }
     },
 
@@ -148,13 +159,11 @@ let game = {
         init: function initGameTimer() {
             let timeStart = new Date();
             game.varTimeElapsed = timeStart.getTime();
-            console.log("Start time: " + game.varTimer);
         },
 
         check: function getTimerElapsed() {
             let timeFinish = new Date();
             game.varTimeElapsed = timeFinish.getTime() - game.varTimeElapsed;
-            console.log("Finish time: " + game.varTimeElapsed);
         }
     }
 }
