@@ -18,6 +18,7 @@ let game = {
     // variables
     arrSquareColors: [],
     varCorrectColor: null,
+    varTimeElapsed: null,
     
     // dom elements
     elSquares: [], // array is populated with game.listeners.initSquares()
@@ -38,12 +39,14 @@ let game = {
         game.arrSquareColors.length = 0; // set board colors to 0
         game.elTitlebar.style.backgroundColor = "steelblue";
         game.board.generate();
+        game.timer.init();
     },
     
     win: function winGame() {
         game.elTitlebar.style.backgroundColor = game.varCorrectColor;
         for (let i = 0; i < game.elSquares.length; i++) {
             game.elSquares[i].style.backgroundColor = game.varCorrectColor;
+            game.listeners.stopListening();
         }
         game.elGameControl.textContent = "PLAY AGAIN?";
     },
@@ -83,19 +86,18 @@ let game = {
             for (let i = 0; i < game.elSquares.length; i++) {
                 game.elSquares[i].style.background = game.arrSquareColors[i];
                 // add event handler to this square
-                game.elSquares[i].addEventListener("click", function() {
-                    if (this.style.backgroundColor === game.varCorrectColor) {
-                        game.elMsg.textContent = "Correct!";
-                        game.win();
-                    } else {
-                        this.style.transform = "rotateY(180deg)";
-                        this.style.backgroundColor = "#232323";
-                        game.elMsg.textContent = "Try again!";
-                    }
-                });
+                game.elSquares[i].addEventListener("click", game.board.checkForWin);
+            }
+        },
+
+        stopListening: function removeListeners() {
+            // remove all the listeners from the squares
+            game.elSquares = document.querySelectorAll(".square");
+            for (let i = 0; i < game.elSquares.length; i++) {
+                game.elSquares[i].removeEventListener("click", game.board.checkForWin);
             }
         }
-    },
+    },    
 
     // functions dealing with board generation
     board: {
@@ -137,6 +139,31 @@ let game = {
             game.board.setSquareColors();
             game.board.getCorrectColor();
             game.listeners.initSquares();
+        },
+
+        checkForWin: function checkForWin() {
+            if (this.style.backgroundColor === game.varCorrectColor) {
+                game.timer.check()
+                game.elMsg.textContent = "Correct in " + (game.varTimeElapsed / 1000) + " seconds!";
+                game.win();
+            } else {
+                this.style.transform = "rotateY(180deg)";
+                this.style.backgroundColor = "#232323";
+                game.elMsg.textContent = "Try again!";
+            }
+        }
+    },
+
+    // timer functions
+    timer: {
+        init: function initGameTimer() {
+            let timeStart = new Date();
+            game.varTimeElapsed = timeStart.getTime();
+        },
+
+        check: function getTimerElapsed() {
+            let timeFinish = new Date();
+            game.varTimeElapsed = timeFinish.getTime() - game.varTimeElapsed;
         }
     }
 }
