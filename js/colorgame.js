@@ -19,6 +19,7 @@ let game = {
     arrSquareColors: [],
     varCorrectColor: null,
     varTimeElapsed: null,
+    varPersonalBest: null,
     
     // dom elements
     elSquares: [], // array is populated with game.listeners.initSquares()
@@ -143,8 +144,11 @@ let game = {
 
         checkForWin: function checkForWin() {
             if (this.style.backgroundColor === game.varCorrectColor) {
-                game.timer.check()
-                game.elMsg.textContent = "Correct in " + (game.varTimeElapsed / 1000) + " seconds!";
+                game.varTimeElapsed = game.timer.check() / 1000;
+                if (game.varPersonalBest === null || game.varPersonalBest > game.varTimeElapsed) {
+                    game.varPersonalBest = game.varTimeElapsed
+                };
+                game.elMsg.textContent = "Correct in " + game.varTimeElapsed + " seconds! ( Personal best: " + game.varPersonalBest + " )";
                 game.win();
             } else {
                 this.style.transform = "rotateY(180deg)";
@@ -172,13 +176,11 @@ let game = {
         init: function initGameTimer() {
             let timeStart = new Date();
             game.varTimeElapsed = timeStart.getTime();
-            console.log("Start time: " + game.varTimer);
         },
 
         check: function getTimerElapsed() {
             let timeFinish = new Date();
-            game.varTimeElapsed = timeFinish.getTime() - game.varTimeElapsed;
-            console.log("Finish time: " + game.varTimeElapsed);
+            return (timeFinish.getTime() - game.varTimeElapsed);
         }
     }
 }
