@@ -102,11 +102,11 @@ let game = {
         setSize: function setBoardSize () {
             // set game board size based on difficulty
             if (difficulty < 4) {
-                game.elBoard.style.maxWidth = "1200px";
+                game.elBoard.style.maxWidth = "900px";
             } else if (difficulty < 7) {
-                game.elBoard.style.maxWidth = "800px";
+                game.elBoard.style.maxWidth = "460px";
             } else {
-                game.elBoard.style.maxWidth = "500px";
+                game.elBoard.style.maxWidth = "310px";
             };
         },
         
