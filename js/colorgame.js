@@ -43,10 +43,10 @@ let game = {
     },
     
     win: function winGame() {
+        game.listeners.stopListening();
         game.elTitlebar.style.backgroundColor = game.varCorrectColor;
         for (let i = 0; i < game.elSquares.length; i++) {
             game.elSquares[i].style.backgroundColor = game.varCorrectColor;
-            game.listeners.stopListening();
         }
         game.elGameControl.textContent = "PLAY AGAIN?";
     },
