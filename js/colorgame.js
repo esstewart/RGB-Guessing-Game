@@ -18,7 +18,6 @@ let game = {
     // variables
     arrSquareColors: [],
     varCorrectColor: null,
-    varTimeElapsed: null,
     
     // dom elements
     elSquares: [], // array is populated with game.listeners.initSquares()
@@ -39,7 +38,6 @@ let game = {
         game.arrSquareColors.length = 0; // set board colors to 0
         game.elTitlebar.style.backgroundColor = "steelblue";
         game.board.generate();
-        game.timer.init();
     },
     
     win: function winGame() {
@@ -87,8 +85,7 @@ let game = {
                 // add event handler to this square
                 game.elSquares[i].addEventListener("click", function() {
                     if (this.style.backgroundColor === game.varCorrectColor) {
-                        game.timer.check()
-                        game.elMsg.textContent = "Correct in " + (game.varTimeElapsed / 1000) + " seconds!";
+                        game.elMsg.textContent = "Correct!";
                         game.win();
                     } else {
                         this.style.transform = "rotateY(180deg)";
@@ -140,21 +137,6 @@ let game = {
             game.board.setSquareColors();
             game.board.getCorrectColor();
             game.listeners.initSquares();
-        }
-    },
-
-    // timer functions
-    timer: {
-        init: function initGameTimer() {
-            let timeStart = new Date();
-            game.varTimeElapsed = timeStart.getTime();
-            console.log("Start time: " + game.varTimer);
-        },
-
-        check: function getTimerElapsed() {
-            let timeFinish = new Date();
-            game.varTimeElapsed = timeFinish.getTime() - game.varTimeElapsed;
-            console.log("Finish time: " + game.varTimeElapsed);
         }
     }
 }
