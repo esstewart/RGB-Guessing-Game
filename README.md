@@ -3,7 +3,7 @@ RGB Color guessing game based on Colt Steele's Web Developer Bootcamp "Color Gam
 
 Wrote most of the game on my own, prior to watching the videos and watched the videos on 1.75x speed whenever I got stuck. Also made my own changes to it (added medium mode, changed the size of the squares depending on difficulty, etc).
 
-Play the game on my GitHub pages: [https://estewdotart.github.io/RGB-Guessing-Game/](https://estewdotart.github.io/RGB-Guessing-Game/)
+Play the game on my GitHub pages: [https://esstewart.github.io/RGB-Guessing-Game/](https://esstewart.github.io/RGB-Guessing-Game/)
 
 How to play
 ------------------
